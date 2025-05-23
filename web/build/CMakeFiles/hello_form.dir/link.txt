@@ -1,0 +1,1 @@
+/usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/hello_form.dir/main.cpp.o -o hello_form   -L/usr/local/lib  -Wl,-rpath,/usr/local/lib -lwt -lwthttp
