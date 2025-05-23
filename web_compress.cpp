@@ -17,6 +17,7 @@ private:
     LZWTrieCompressor lzw;
     
     // UI Elements
+    
     Wt::WFileUpload *upload_;
     Wt::WText *status_;
     Wt::WTextArea *originalContent_;
