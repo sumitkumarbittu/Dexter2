@@ -109,69 +109,75 @@ input[type="file"] {
   <button class="button decompress" onclick="processFile('decompress')">Decompress</button>
 
   <script>
-    let fileContent = "";
-    const dropZone = document.getElementById("dropZone");
-    const fileInput = document.getElementById("fileInput");
+    <script>
+  let fileContent = "";
+  const dropZone = document.getElementById("dropZone");
+  const fileInput = document.getElementById("fileInput");
 
-    dropZone.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      dropZone.classList.add("hover");
-    });
+  dropZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropZone.classList.add("hover");
+  });
 
-    dropZone.addEventListener("dragleave", () => {
-      dropZone.classList.remove("hover");
-    });
+  dropZone.addEventListener("dragleave", () => {
+    dropZone.classList.remove("hover");
+  });
 
-    dropZone.addEventListener("drop", (e) => {
-      e.preventDefault();
-      dropZone.classList.remove("hover");
-      handleFile(e.dataTransfer.files[0]);
-    });
+  dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropZone.classList.remove("hover");
+    handleFile(e.dataTransfer.files[0]);
+  });
 
-    fileInput.addEventListener("change", () => {
-      handleFile(fileInput.files[0]);
-    });
+  fileInput.addEventListener("change", () => {
+    handleFile(fileInput.files[0]);
+  });
 
-    function handleFile(file) {
-      if (!file || file.type !== "text/plain") {
-        alert("Only .txt files are allowed.");
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        fileContent = e.target.result;
-        alert("File loaded successfully.");
-      };
-      reader.readAsText(file);
+  function handleFile(file) {
+    if (!file || file.type !== "text/plain") {
+      alert("Only .txt files are allowed.");
+      return;
     }
 
-    function processFile(action) {
-      if (!fileContent) {
-        alert("Please upload a .txt file first.");
-        return;
-      }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      fileContent = e.target.result;
+      alert("File loaded successfully.");
+    };
+    reader.readAsText(file);
+  }
 
-      fetch('/' + action, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: fileContent })
-      })
-      .then(res => res.text())
-      .then(data => {
-        const blob = new Blob([data], { type: 'text/plain' });
-        const downloadLink = document.createElement('a');
-        downloadLink.href = URL.createObjectURL(blob);
-        downloadLink.download = action + ".txt";
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-      })
-      .catch(err => {
-        console.error('Error:', err);
-        alert("Error occurred during " + action);
-      });
+  function processFile(action) {
+    if (!fileContent) {
+      alert("Please upload a .txt file first.");
+      return;
     }
+
+    fetch(`https://dexter2.onrender.com/${action}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: fileContent })
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Server error");
+      return res.text();
+    })
+    .then(data => {
+      const blob = new Blob([data], { type: 'text/plain' });
+      const downloadLink = document.createElement('a');
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = `${action}.txt`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    })
+    .catch(err => {
+      console.error('Error:', err);
+      alert(`Error occurred during ${action}.`);
+    });
+  }
+</script>
+
   </script>
 
 </body>
