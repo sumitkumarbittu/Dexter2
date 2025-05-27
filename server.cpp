@@ -201,6 +201,20 @@ int main() {
         }
     });
 
+    svr.set_default_headers({
+  {"Access-Control-Allow-Origin", "*"},
+  {"Access-Control-Allow-Methods", "POST, GET, OPTIONS"},
+  {"Access-Control-Allow-Headers", "Content-Type"}
+});
+
+svr.Options("/.*", [](const Request&, Response& res) {
+  res.set_header("Access-Control-Allow-Origin", "*");
+  res.set_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+  res.set_header("Access-Control-Allow-Headers", "Content-Type");
+  res.status = 204;
+});
+
+
     int port = getenv("PORT") ? stoi(getenv("PORT")) : 8080;
     cout << "Listening on port " << port << endl;
     svr.listen("0.0.0.0", port);
