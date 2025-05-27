@@ -7,6 +7,8 @@ RUN git clone https://github.com/yhirose/cpp-httplib.git
 
 COPY server.cpp .
 
-RUN g++ server.cpp cpp-httplib/httplib.h -o server
+RUN g++ -std=c++11 server.cpp -o server
+
+EXPOSE 8080
 
 CMD ["./server"]

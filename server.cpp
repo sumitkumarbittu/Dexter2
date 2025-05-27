@@ -1,5 +1,6 @@
 #include <httplib.h>
-#include <cstdlib>  // add at the top for getenv
+#include <cstdlib> // for getenv
+#include <iostream>
 
 int main() {
     using namespace httplib;
@@ -10,5 +11,6 @@ int main() {
     });
 
     int port = std::getenv("PORT") ? std::stoi(std::getenv("PORT")) : 8080;
+    std::cout << "Listening on port " << port << std::endl;
     svr.listen("0.0.0.0", port);
 }
