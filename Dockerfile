@@ -9,6 +9,7 @@ RUN git clone https://github.com/yhirose/cpp-httplib.git
 
 # Copy your source code
 COPY server.cpp .
+COPY index.html .
 
 # Compile your C++ server, specifying the path to httplib.h
 RUN g++ -std=c++11 server.cpp -o server
