@@ -1,21 +1,19 @@
 FROM gcc:latest
 
-# Install git to clone the httplib repository
-RUN apt-get update && \
-    apt-get install -y git
+# Install git
+RUN apt-get update && apt-get install -y git
 
-# Clone cpp-httplib
-RUN git clone https://github.com/yhirose/cpp-httplib.git
+# Clone header-only libraries
+RUN git clone https://github.com/yhirose/cpp-httplib.git && \
+    git clone https://github.com/nlohmann/json.git
 
-# Copy your source code
+# Copy your source and HTML files
 COPY server.cpp .
 COPY index.html .
 
-# Compile your C++ server, specifying the path to httplib.h
-RUN g++ -std=c++11 server.cpp -o server
+# Compile using the libraries
+RUN g++ -std=c++17 server.cpp -o server -Icpp-httplib -Inlohmann/json/single_include
 
-# Expose the port for the Render platform
 EXPOSE 8080
 
-# Start the server
 CMD ["./server"]
