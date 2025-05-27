@@ -1,18 +1,19 @@
 FROM gcc:latest
 
-# Install git
-RUN apt-get update && apt-get install -y git
+# Install git and wget
+RUN apt-get update && apt-get install -y git wget
 
-# Clone header-only libraries
+# Clone httplib and download nlohmann/json single-header
 RUN git clone https://github.com/yhirose/cpp-httplib.git && \
-    git clone https://github.com/nlohmann/json.git
+    mkdir -p nlohmann && \
+    wget https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp -O nlohmann/json.hpp
 
-# Copy your source and HTML files
+# Copy project files
 COPY server.cpp .
 COPY index.html .
 
-# Compile using the libraries
-RUN g++ -std=c++17 server.cpp -o server -Icpp-httplib -Inlohmann/json/single_include
+# Compile with includes
+RUN g++ -std=c++17 server.cpp -o server -Icpp-httplib -Inlohmann
 
 EXPOSE 8080
 
