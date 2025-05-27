@@ -1,4 +1,5 @@
 #include <httplib.h>
+#include <cstdlib>  // add at the top for getenv
 
 int main() {
     using namespace httplib;
@@ -8,5 +9,6 @@ int main() {
         res.set_content("Hello from C++ backend!", "text/plain");
     });
 
-    svr.listen("0.0.0.0", 8080); // Listen on port 8080
+    int port = std::getenv("PORT") ? std::stoi(std::getenv("PORT")) : 8080;
+    svr.listen("0.0.0.0", port);
 }

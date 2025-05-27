@@ -1,17 +1,12 @@
 FROM gcc:latest
-WORKDIR /app
 
-# Install required packages and dependencies
-RUN apt-get update && apt-get install -y wget
+RUN apt-get update && \
+    apt-get install -y git
 
-# Download httplib.h
-RUN wget https://raw.githubusercontent.com/yhirose/cpp-httplib/master/httplib.h
+RUN git clone https://github.com/yhirose/cpp-httplib.git
 
-# Copy source files
-COPY . .
+COPY server.cpp .
 
-# Compile the C++ application
-RUN g++ -o server server.cpp
+RUN g++ server.cpp cpp-httplib/httplib.h -o server
 
-EXPOSE 8080
 CMD ["./server"]
